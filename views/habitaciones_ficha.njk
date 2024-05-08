@@ -1,0 +1,69 @@
+{% extends "base.njk" %}
+
+{% block titulo %}Habitaciones | Ficha{% endblock %}
+
+{% block contenido %}
+
+    <h1>Ficha de habitación {{habitacion.numero}}</h1>
+    <div>
+        {% if habitacion.imagen %}
+            <p><img src="/public/uploads/habitaciones/{{ habitacion.imagen }}" height="300" width="350"></p>
+        {% endif %}
+        <p>Tipo {{ habitacion.tipo }} <strong>{{habitacion.precio}}eur/noche</strong></p>
+        <p>{{habitacion.descripcion}}</p>
+
+        {% if (session and session.usuario) %}
+            <form action="/habitaciones/{{habitacion.id}}" method="post">
+                <input type="hidden" name="_method" value="delete" />
+                <button type="submit" class="btn btn-danger">Borrar habitación</button>
+            </form>
+        {% endif %}
+
+        <h2>Incidencias</h2>
+
+        {% if (session and session.usuario) %}
+            <h3>Nueva incidencia</h3>
+            <form action="/habitaciones/{{habitacion.id}}/incidencias" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label>Descripción:</label>
+                    <textarea class="form-control" name="descripcion"
+                        placeholder="Descripción..." rows="4" required></textarea>
+                </div>
+                <br>
+                <div class="form-group">
+                    <label>Imagen de la habitacion:</label>
+                    <input type="file" name="imagen" class="form-control"></input>
+                </div>
+                <br>
+                <button type="submit" class="btn btn-primary">Enviar</button>
+            </form>
+        {% endif %}
+
+        <h3>Listado de incidencias</h3>
+        {% for inc in habitacion.incidencias %}
+
+        <p>{{inc.inicio | date("(DD/MM/YYYY)")}}</p>
+        {% if inc.imagen %}
+            <p><img src="/public/uploads/incidencias/{{ inc.imagen }}" height="300" width="350"></p>
+        {% endif %}
+        <p>{{inc.descripcion}}</p>
+        {% if inc.fin %}
+            <p>Cerrada el {{inc.fin | date("(DD/MM/YYYY)")}}</p>
+        {% else %}
+            {% if (session and session.usuario) %}
+                <form action="/habitaciones/{{habitacion.id}}/incidencias/{{inc.id}}" method="post">
+                    <input type="hidden" name="_method" value="put" />
+                    <button type="submit" class="btn btn-danger">Cerrar</button>
+                </form>
+            {% endif %}
+        {% endif %}
+        <br>
+        {% else %}
+            <p>No hay incidencias que mostrar</p>
+        {% endfor %}
+
+        <h2>Limpiezas</h2>
+        <p><a class="btn btn-success" href="/limpiezas/{{ habitacion.id }}">Ver limpiezas</a></p>
+    </div>
+
+{% endblock %}

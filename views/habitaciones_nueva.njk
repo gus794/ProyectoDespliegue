@@ -1,0 +1,62 @@
+{% extends "base.njk" %}
+
+{% block titulo %}Habitaciones | Nuevo{% endblock %}
+
+{% block contenido %}
+
+ <h1>Inserción de una nueva habitación</h1>
+
+ {% if errores.general %}
+    <p class="alert alert-danger">{{ errores.general }}</p>
+ {% endif %}
+
+ <form action="/habitaciones" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label>Número de la habitación:</label>
+        {% if errores.numero %}
+            <p class="text-danger">{{ errores.numero }}</p>
+        {% endif %}
+        <input type="numeric" class="form-control" name="numero" 
+                placeholder="Número de la habitación..." value="{{ datos.numero }}">
+    </div>
+    <br>
+    <div class="form-group">
+        <label>Tipo de la habitación:</label>
+        {% if errores.tipo %}
+            <p class="text-danger">{{ errores.tipo }}</p>
+        {% endif %}
+        <select class="form-select" name="tipo" value="{{ datos.tipo }}">
+            <option value="individual">Individual</option>
+            <option value="doble">Doble</option>
+            <option value="familiar">Familiar</option>
+            <option value="suite">Suite</option>
+        </select>
+    </div>
+    <br>
+    <div class="form-group">
+        <label>Descripción:</label>
+        {% if errores.descripcion %}
+                <p class="text-danger">{{ errores.descripcion }}</p>
+        {% endif %}
+        <textarea class="form-control" name="descripcion"
+            placeholder="Descripción..." rows="4" value="{{ datos.descripcion }}"></textarea>
+    </div>
+    <br>
+    <div class="form-group">
+        <label>Precio:</label>
+        {% if errores.precio %}
+            <p class="text-danger">{{ errores.precio }}</p>
+        {% endif %}
+        <input type="number" class="form-control" name="precio"
+            placeholder="Precio..." value="{{ datos.precio }}"></input>
+    </div>
+    <br>
+    <div class="form-group">
+        <label>Imagen de la habitacion:</label>
+        <input type="file" name="imagen" class="form-control"></input>
+    </div>
+    <br>
+    <button type="submit" class="btn btn-primary">Enviar</button>
+ </form>
+
+{% endblock %}

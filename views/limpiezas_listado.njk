@@ -1,0 +1,32 @@
+{% extends "base.njk" %}
+
+{% block titulo %}Habitaciones | Listado{% endblock %}
+
+{% block contenido %}
+
+    <h1>Limpiezas de habitación {{habitacion.numero}}</h1>
+
+    {% if (session and session.usuario) %}
+          <a href="/limpiezas/nueva/{{habitacion.id}}"><button class="btn btn-primary">Nueva limpieza</button></a>
+    {% endif %}
+
+    <table width="100%">
+        {% for limpieza in limpiezas %}
+            <tr>
+                <td>{{ limpieza.fecha | date("DD/MM/YYYY") }}</td>
+            </tr>
+
+            <tr>
+                {% if limpieza.observaciones is defined and limpieza.observaciones.length != 0 %}
+                    <td>{{limpieza.observaciones}}</td>
+                {% else %}
+                    <td>Sin observaciones</td>
+                {% endif %}
+            </tr>
+            <tr><td><br></td></tr>
+        {% else %}
+            <tr><td>No hay limpiezas que mostrar.</td></tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}
